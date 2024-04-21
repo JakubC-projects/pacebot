@@ -1,0 +1,9 @@
+{
+    "cSpell.words": [
+        "myshare",
+        "peacefulroad",
+        "Ustron"
+    ],
+    "go.testEnvFile": "${workspaceFolder}/.env",
+
+}
