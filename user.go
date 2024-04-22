@@ -16,4 +16,5 @@ type User struct {
 type UserService interface {
 	GetUser(ctx context.Context, chatId int) (User, error)
 	SaveUser(ctx context.Context, u User) error
+	DeleteUser(ctx context.Context, chatId int) error
 }

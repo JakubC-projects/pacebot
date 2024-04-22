@@ -3,6 +3,8 @@ package auth
 import (
 	"fmt"
 	"net/http"
+
+	peacefulroad "github.com/JakubC-projects/peaceful-road"
 )
 
 // Handler for our login.
@@ -18,32 +20,13 @@ func (a *Auth) logoutHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	u, err := a.us.GetUser(ctx, chatId)
+	err = a.postLogoutAction(ctx, peacefulroad.User{ChatId: chatId})
 	if err != nil {
-		err = fmt.Errorf("cannot find user: %w", err)
-		a.log.WarnContext(ctx, err.Error())
-
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	u.Token = nil
-
-	err = a.us.SaveUser(ctx, u)
-	if err != nil {
-		err = fmt.Errorf("cannot remove user session: %w", err)
+		err := fmt.Errorf("cannot perform post logout action: %w", err)
 		a.log.ErrorContext(ctx, err.Error())
-
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// err = a.tgs.SendWelcomeMessage(ctx, u)
-	// if err != nil {
-	// 	err = fmt.Errorf("cannot remove user session: %w", err)
-	// 	a.log.ErrorContext(ctx, err.Error())
-	// 	return
-	// }
-
-	http.Redirect(w, req, a.tgs.GetBotUrl(), http.StatusTemporaryRedirect)
+	http.Redirect(w, req, a.logoutUrl, http.StatusTemporaryRedirect)
 }

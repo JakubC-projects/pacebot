@@ -13,6 +13,10 @@ func (a *Auth) AddRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /logout", a.logoutHandler)
 }
 
-func (a *Auth) LoginEndpoint() string {
-	return fmt.Sprintf("%s/login", a.host)
+func (a *Auth) LoginEndpoint(chatId int) string {
+	return fmt.Sprintf("%s/login?chatId=%d", a.host, chatId)
+}
+
+func (a *Auth) LogoutEndpoint(chatId int) string {
+	return fmt.Sprintf("%s/logout?chatId=%d", a.host, chatId)
 }

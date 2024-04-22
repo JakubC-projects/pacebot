@@ -10,27 +10,48 @@ import (
 )
 
 func (l *Logic) HandleUpdate(ctx context.Context, upd tgbotapi.Update) error {
-	if upd.Message != nil {
-		chatId := int(upd.Message.Chat.ID)
+	var chatId = getChatId(upd)
 
-		u, err := l.us.GetUser(ctx, chatId)
-		if errors.Is(err, peacefulroad.ErrNotFound) {
-			err := l.tg.SendWelcomeMessage(chatId, "http://test.dev:8080/login")
-			if err != nil {
-				fmt.Println(err)
-			}
-		}
+	user, err := l.us.GetUser(ctx, chatId)
+	if errors.Is(err, peacefulroad.ErrNotFound) {
+		err := l.tg.SendWelcomeMessage(chatId, l.auth.LoginEndpoint(chatId))
 		if err != nil {
-			return fmt.Errorf("cannot get user: %w", err)
+			fmt.Println(err)
 		}
-
-		fmt.Println(u)
 	}
-	// if upd.CallbackQuery != nil {
-	// 	if upd.CallbackQuery.Data == "show-status" {
+	if err != nil {
+		return fmt.Errorf("cannot get user: %w", err)
+	}
 
-	// 	}
-	// }
-	fmt.Println("received update", upd)
+	statusMessage, err := l.getStatusMessage(ctx, user)
+	if err != nil {
+		return err
+	}
+
+	if upd.CallbackQuery != nil {
+		if upd.CallbackQuery.Data == "show-status" {
+			err = l.tg.EditStatusMessage(chatId, upd.CallbackQuery.Message.MessageID, statusMessage)
+			if err != nil {
+				return err
+			}
+
+			return nil
+		}
+	}
+	err = l.tg.SendStatusMessage(chatId, statusMessage)
+	if err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func getChatId(upd tgbotapi.Update) int {
+	if upd.Message != nil {
+		return int(upd.Message.Chat.ID)
+	}
+	if upd.CallbackQuery != nil {
+		return int(upd.CallbackQuery.From.ID)
+	}
+	return 0
 }

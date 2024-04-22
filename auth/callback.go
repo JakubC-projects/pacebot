@@ -30,17 +30,9 @@ func (a *Auth) callbackHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	user, err := a.us.GetUser(ctx, ls.ChatId)
-	if errors.Is(err, peacefulroad.ErrNotFound) {
-		user = peacefulroad.User{ChatId: ls.ChatId}
-	} else if err != nil {
-		err := fmt.Errorf("cannot get callback token: %w", err)
-		a.log.ErrorContext(ctx, err.Error())
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-
+	user := peacefulroad.User{ChatId: ls.ChatId}
 	err = fillUserDataFromToken(&user, token)
+
 	if err != nil {
 		err := fmt.Errorf("cannot parse token: %w", err)
 		a.log.ErrorContext(ctx, err.Error())

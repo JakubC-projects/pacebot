@@ -61,3 +61,7 @@ func getChatId(req *http.Request) (int, error) {
 func (a *Auth) SetPostLoginAction(action PostLoginAction) {
 	a.postLoginAction = action
 }
+
+func (a *Auth) SetPostLogoutAction(action PostLoginAction) {
+	a.postLogoutAction = action
+}

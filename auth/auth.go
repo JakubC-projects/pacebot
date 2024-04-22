@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net/url"
 
 	peacefulroad "github.com/JakubC-projects/peaceful-road"
 	"github.com/coreos/go-oidc"
@@ -13,12 +14,13 @@ import (
 type PostLoginAction func(ctx context.Context, user peacefulroad.User) error
 
 type Auth struct {
-	config          *oauth2.Config
-	host            string
-	us              peacefulroad.UserService
-	tgs             peacefulroad.TelegramService
-	log             *slog.Logger
-	postLoginAction PostLoginAction
+	config           *oauth2.Config
+	logoutUrl        string
+	host             string
+	tgs              peacefulroad.TelegramService
+	log              *slog.Logger
+	postLoginAction  PostLoginAction
+	postLogoutAction PostLoginAction
 }
 
 type Config struct {
@@ -37,6 +39,8 @@ func New(
 		TokenURL: fmt.Sprintf("https://%s/oauth/token", conf.Issuer),
 	}
 
+	logoutUrl := fmt.Sprintf("https://%s/v2/logout?returnTo=%s&client_id=%s ", conf.Issuer, url.QueryEscape(tgs.GetBotUrl()), conf.ClientId)
+
 	oauthConfig := &oauth2.Config{
 		ClientID:     conf.ClientId,
 		ClientSecret: conf.ClientSecret,
@@ -45,5 +49,5 @@ func New(
 		Scopes:       []string{oidc.ScopeOpenID, "profile", "offline_access"},
 	}
 
-	return &Auth{oauthConfig, conf.Host, us, tgs, log, nil}
+	return &Auth{oauthConfig, logoutUrl, conf.Host, tgs, log, nil, nil}
 }

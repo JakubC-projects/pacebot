@@ -7,8 +7,9 @@ import (
 	"os"
 
 	"github.com/JakubC-projects/peaceful-road/auth"
-	"github.com/JakubC-projects/peaceful-road/inmem"
+	"github.com/JakubC-projects/peaceful-road/firebase"
 	"github.com/JakubC-projects/peaceful-road/logic"
+	"github.com/JakubC-projects/peaceful-road/myshare"
 	"github.com/JakubC-projects/peaceful-road/telegram"
 )
 
@@ -17,20 +18,24 @@ var (
 	serverHost = os.Getenv("SERVER_HOST")
 
 	telegramApiKey = os.Getenv("TELEGRAM_API_KEY")
+	gcpProjectId   = os.Getenv("GCP_PROJECT")
 
 	oauthIssuer       = os.Getenv("OAUTH_ISSUER")
 	oauthClientId     = os.Getenv("OAUTH_CLIENT_ID")
 	oauthClientSecret = os.Getenv("OAUTH_CLIENT_SECRET")
 
-	// myshareBaseUrl  = os.Getenv("MYSHARE_BASE_URL")
+	myshareBaseUrl  = os.Getenv("MYSHARE_BASE_URL")
+	myshareClubId   = os.Getenv("MYSHARE_CLUB_ID")
 	myshareAudience = os.Getenv("MYSHARE_AUDIENCE")
 )
 
 func main() {
 	mux := http.NewServeMux()
 
-	us := inmem.NewUserService()
 	tg := telegram.New(telegramApiKey)
+
+	myshareClient := myshare.NewClient(myshareBaseUrl, myshareClubId)
+	firestore := firebase.NewStore(gcpProjectId)
 
 	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{}))
 
@@ -40,9 +45,9 @@ func main() {
 		ClientSecret: oauthClientSecret,
 		Audience:     myshareAudience,
 		Host:         serverHost,
-	}, us, tg, logger)
+	}, firestore, tg, logger)
 
-	logic := logic.New(tg, us, auth)
+	logic := logic.New(tg, firestore, myshareClient, auth)
 
 	auth.AddRoutes(mux)
 
