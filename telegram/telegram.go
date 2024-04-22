@@ -48,6 +48,8 @@ func (s *Service) HandleUpdatesEndpoint(handler UpdateHandler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		upd, err := s.bot.HandleUpdate(r)
 		if err != nil {
+			fmt.Println(err)
+
 			http.Error(w, "cannot parse update", http.StatusBadRequest)
 			return
 		}
@@ -55,6 +57,7 @@ func (s *Service) HandleUpdatesEndpoint(handler UpdateHandler) http.Handler {
 		err = handler(r.Context(), *upd)
 
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "cannot handle update", http.StatusInternalServerError)
 		}
 	})
