@@ -6,7 +6,7 @@ on:
 env:
   IMAGE_URL: europe-central2-docker.pkg.dev/peaceful-road/main/peaceful-road
   CLOUD_RUN_NAME: peaceful-road
-  CLOUD_RUN_REGION: europe-west4
+  CLOUD_RUN_REGION: europe-central2
 
 jobs:
   build:
