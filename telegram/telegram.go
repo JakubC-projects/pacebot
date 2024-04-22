@@ -45,11 +45,14 @@ func (s *Service) HandleUpdatesPull(handler UpdateHandler) {
 }
 
 func (s *Service) HandleUpdatesEndpoint(handler UpdateHandler) http.Handler {
-
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var upd tgbotapi.Update
+		upd, err := s.bot.HandleUpdate(r)
+		if err != nil {
+			http.Error(w, "cannot parse update", http.StatusBadRequest)
+			return
+		}
 
-		err := handler(r.Context(), upd)
+		err = handler(r.Context(), *upd)
 
 		if err != nil {
 			http.Error(w, "cannot handle update", http.StatusInternalServerError)

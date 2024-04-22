@@ -27,6 +27,8 @@ var (
 	myshareBaseUrl  = os.Getenv("MYSHARE_BASE_URL")
 	myshareClubId   = os.Getenv("MYSHARE_CLUB_ID")
 	myshareAudience = os.Getenv("MYSHARE_AUDIENCE")
+
+	usePolling = os.Getenv("USE_POLLING")
 )
 
 func main() {
@@ -51,7 +53,11 @@ func main() {
 
 	auth.AddRoutes(mux)
 
-	go tg.HandleUpdatesPull(logic.HandleUpdate)
+	if usePolling == "true" {
+		go tg.HandleUpdatesPull(logic.HandleUpdate)
+	} else {
+		mux.Handle("/updates", tg.HandleUpdatesEndpoint(logic.HandleUpdate))
+	}
 
 	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
 }
