@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_URL: europe-west4-docker.pkg.dev/peaceful-road/main/peaceful-road
+  IMAGE_URL: europe-central2-docker.pkg.dev/peaceful-road/main/peaceful-road
   CLOUD_RUN_NAME: peaceful-road
   CLOUD_RUN_REGION: europe-west4
 
@@ -23,7 +23,7 @@ jobs:
       - name: Login to the artifact registry
         shell: bash
         run: |-
-          gcloud --quiet auth configure-docker europe-west4-docker.pkg.dev
+          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v2
