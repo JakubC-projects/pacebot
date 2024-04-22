@@ -18,6 +18,7 @@ func (l *Logic) HandleUpdate(ctx context.Context, upd tgbotapi.Update) error {
 		if err != nil {
 			fmt.Println(err)
 		}
+		return nil
 	}
 	if err != nil {
 		return fmt.Errorf("cannot get user: %w", err)
