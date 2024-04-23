@@ -46,15 +46,21 @@ func (s *Service) EditStatusMessage(chatId int, messageId int, content peacefulr
 
 func (s *Service) getStatusMessage(content peacefulroad.StatusMessage) (string, tgbotapi.InlineKeyboardMarkup) {
 	userPercent := content.CurrentStatus / content.SeasonTarget * 100
+
+	missingAmount := (content.WeekTarget - userPercent) * content.SeasonTarget / 100
+
 	statusEmoji := "🟢"
-	if userPercent < content.WeekTarget {
+	statusMessage := ""
+
+	if missingAmount > 0 {
 		statusEmoji = "🔴"
+		statusMessage = fmt.Sprintf("Brakuje ci: <b>%.2f</b> %s\n", missingAmount, content.Currency)
 	}
 
 	text := fmt.Sprintf(`
 Cel na ten tydzień: <b>%.2f%%</b>
 Twój Status: <b>%.2f%%</b> %s (%.2f / %.2f %s)
-
+%s
 <a href="%s">Zapisz się na Dugnad!</a>
 <a href="%s">Wpłać na MyShare!</a>
 
@@ -66,6 +72,7 @@ Dane z: %s
 		content.CurrentStatus,
 		content.SeasonTarget,
 		content.Currency,
+		statusMessage,
 		content.RegisterURL,
 		content.DonateURL,
 		time.Now().Format("2006-01-02 15:04:05"),
