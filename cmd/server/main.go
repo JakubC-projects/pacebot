@@ -32,6 +32,8 @@ var (
 )
 
 func main() {
+	os.Setenv("TZ", "Europe/Warsaw")
+
 	mux := http.NewServeMux()
 
 	tg := telegram.New(telegramApiKey)
