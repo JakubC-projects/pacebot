@@ -20,9 +20,10 @@ func (l *Logic) getStatusMessage(ctx context.Context, user peacefulroad.User) (p
 		Currency:      status.Currency,
 		WeekTarget:    getStatusForWeek(time.Now()),
 
-		RegisterURL: "https://app.myshare.today/registration",
-		DonateURL:   "https://donationbuk.no",
-		LogoutURL:   l.auth.LogoutEndpoint(user.ChatId),
+		RegisterURL:   "https://app.myshare.today/registration",
+		DonateURL:     "https://donationbuk.no",
+		LogoutURL:     l.auth.LogoutEndpoint(user.ChatId),
+		ShowNotifyAll: user.IsAdmin,
 	}
 
 	return statusMessage, nil

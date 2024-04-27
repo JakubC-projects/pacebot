@@ -78,11 +78,21 @@ Dane z: %s
 		time.Now().Format("2006-01-02 15:04:05"),
 	)
 
-	buttons := tgbotapi.InlineKeyboardMarkup{
-		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
-			{{Text: "Odśwież", CallbackData: lo.ToPtr("show-status")}},
-			{{Text: "Wyloguj się", URL: lo.ToPtr(content.LogoutURL)}},
-		}}
+	var keyboard [][]tgbotapi.InlineKeyboardButton
 
-	return text, buttons
+	keyboard = append(keyboard, []tgbotapi.InlineKeyboardButton{
+		{Text: "Odśwież", CallbackData: lo.ToPtr("show-status")},
+	})
+
+	if content.ShowNotifyAll {
+		keyboard = append(keyboard, []tgbotapi.InlineKeyboardButton{
+			{Text: "Powiadom Wszystkich", CallbackData: lo.ToPtr("notify-all")},
+		})
+	}
+
+	keyboard = append(keyboard, []tgbotapi.InlineKeyboardButton{
+		{Text: "Wyloguj się", URL: lo.ToPtr(content.LogoutURL)},
+	})
+
+	return text, tgbotapi.InlineKeyboardMarkup{InlineKeyboard: keyboard}
 }

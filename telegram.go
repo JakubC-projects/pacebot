@@ -12,11 +12,14 @@ type StatusMessage struct {
 	DonateURL   string
 
 	LogoutURL string
+
+	ShowNotifyAll bool
 }
 
 type TelegramService interface {
 	GetBotUrl() string
 	SendWelcomeMessage(chatId int, loginUrl string) error
 	SendStatusMessage(chatId int, status StatusMessage) error
+	SendErrorMessage(chatId int, msg string) error
 	EditStatusMessage(chatId int, messageId int, status StatusMessage) error
 }

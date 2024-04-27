@@ -11,10 +11,12 @@ type User struct {
 	Token       *oauth2.Token
 	DisplayName string
 	PersonID    int
+	IsAdmin     bool
 }
 
 type UserService interface {
 	GetUser(ctx context.Context, chatId int) (User, error)
+	GetAllUsers(ctx context.Context) ([]User, error)
 	SaveUser(ctx context.Context, u User) error
 	DeleteUser(ctx context.Context, chatId int) error
 }
