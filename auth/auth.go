@@ -51,3 +51,8 @@ func New(
 
 	return &Auth{oauthConfig, logoutUrl, conf.Host, tgs, log, nil, nil}
 }
+
+func (a *Auth) GetFreshToken(ctx context.Context, t *oauth2.Token) (*oauth2.Token, error) {
+	ts := a.config.TokenSource(ctx, t)
+	return ts.Token()
+}

@@ -22,7 +22,20 @@ func (l *Logic) HandleUpdate(ctx context.Context, upd tgbotapi.Update) error {
 		return nil
 	}
 	if err != nil {
-		return fmt.Errorf("cannot get user: %w", err)
+		err := fmt.Errorf("cannot get user: %w", err)
+		fmt.Println(err.Error())
+		l.tg.SendErrorMessage(user.ChatId, err.Error())
+		return err
+	}
+
+	err = l.ensureValidToken(ctx, &user)
+	if err != nil {
+		fmt.Println(err.Error())
+		err := l.tg.SendWelcomeMessage(chatId, l.auth.LoginEndpoint(chatId))
+		if err != nil {
+			fmt.Println(err)
+		}
+		return nil
 	}
 
 	if upd.CallbackQuery != nil {
@@ -84,6 +97,11 @@ func (l *Logic) handleNotifyAll(ctx context.Context, user peacefulroad.User) err
 	for _, user := range allUsers {
 		user := user
 		eg.Go(func() error {
+			err := l.ensureValidToken(ctx, &user)
+			if err != nil {
+				l.tg.SendWelcomeMessage(user.ChatId, l.auth.LoginEndpoint(user.ChatId))
+				return nil
+			}
 			statusMessage, err := l.getStatusMessage(ctx, user)
 			if err != nil {
 				return err
@@ -97,6 +115,22 @@ func (l *Logic) handleNotifyAll(ctx context.Context, user peacefulroad.User) err
 	}
 
 	return eg.Wait()
+}
+
+func (l *Logic) ensureValidToken(ctx context.Context, user *peacefulroad.User) error {
+	tok, err := l.auth.GetFreshToken(ctx, user.Token)
+	if err != nil {
+		return fmt.Errorf("cannot get fresh token: %w", err)
+	}
+	if tok.AccessToken != user.Token.AccessToken {
+		user.Token = tok
+		err := l.us.SaveUser(ctx, *user)
+		if err != nil {
+			return fmt.Errorf("cannot save user: %w", err)
+		}
+	}
+
+	return nil
 }
 
 func getChatId(upd tgbotapi.Update) int {
