@@ -99,15 +99,20 @@ func (l *Logic) handleNotifyAll(ctx context.Context, user peacefulroad.User) err
 		eg.Go(func() error {
 			err := l.ensureValidToken(ctx, &user)
 			if err != nil {
+				fmt.Printf("cannot renew token for %s: %s\n", user.DisplayName, err)
 				l.tg.SendWelcomeMessage(user.ChatId, l.auth.LoginEndpoint(user.ChatId))
 				return nil
 			}
 			statusMessage, err := l.getStatusMessage(ctx, user)
 			if err != nil {
+				err = fmt.Errorf("cannot calculate status message for %s: %w", user.DisplayName, err)
+				fmt.Println(err)
 				return err
 			}
 			err = l.tg.SendStatusMessage(user.ChatId, statusMessage)
 			if err != nil {
+				err = fmt.Errorf("cannot send status message to %s: %w", user.DisplayName, err)
+				fmt.Println(err)
 				return err
 			}
 			return nil
