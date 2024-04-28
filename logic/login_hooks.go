@@ -5,10 +5,25 @@ import (
 	"fmt"
 
 	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/peaceful-road/myshare"
+	"github.com/samber/lo"
 )
 
 func (a *Logic) postLoginHook(ctx context.Context, user peacefulroad.User) error {
-	err := a.us.SaveUser(ctx, user)
+	orgs, err := a.ms.GetOrgs(ctx, user)
+	if err != nil {
+		return fmt.Errorf("cannot get user orgs: %w", err)
+	}
+	orgIds := lo.Map(orgs, func(o myshare.Org, _ int) int { return o.Id })
+
+	userClubs := lo.Intersect(orgIds, a.allowedClubIds)
+	if len(userClubs) < 1 {
+		return fmt.Errorf("not a user of supported club")
+	}
+
+	user.ClubId = userClubs[0]
+
+	err = a.us.SaveUser(ctx, user)
 	if err != nil {
 		return fmt.Errorf("cannot save user: %w", err)
 	}

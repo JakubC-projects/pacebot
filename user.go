@@ -11,6 +11,7 @@ type User struct {
 	Token       *oauth2.Token
 	DisplayName string
 	PersonID    int
+	ClubId      int
 	IsAdmin     bool
 }
 

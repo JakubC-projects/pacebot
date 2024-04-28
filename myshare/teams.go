@@ -7,6 +7,7 @@ import (
 )
 
 type Org struct {
+	Id int `json:"id"`
 }
 
 func (c *Client) GetOrgs(ctx context.Context, u peacefulroad.User) ([]Org, error) {

@@ -9,7 +9,7 @@ import (
 )
 
 func (l *Logic) getStatusMessage(ctx context.Context, user peacefulroad.User) (peacefulroad.StatusMessage, error) {
-	status, err := l.ms.GetStatus(ctx, user.Token, user.PersonID)
+	status, err := l.ms.GetStatus(ctx, user.Token, user)
 	if err != nil {
 		return peacefulroad.StatusMessage{}, fmt.Errorf("cannot get user status: %w", err)
 	}

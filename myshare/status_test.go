@@ -6,23 +6,26 @@ import (
 	"os"
 	"testing"
 
+	peacefulroad "github.com/JakubC-projects/peaceful-road"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
 )
 
 var (
 	baseUrl = os.Getenv("MYSHARE_BASE_URL")
-	clubId  = os.Getenv("MYSHARE_CLUB_ID")
 )
 
 func TestGetStatus(t *testing.T) {
 	tokenRaw := ""
-	personId := 41838
+	u := peacefulroad.User{
+		PersonID: 41838,
+		ClubId:   3982,
+	}
 	token := &oauth2.Token{AccessToken: tokenRaw, TokenType: "Bearer"}
 
-	client := NewClient(baseUrl, clubId)
+	client := NewClient(baseUrl)
 
-	status, err := client.GetStatus(context.Background(), token, personId)
+	status, err := client.GetStatus(context.Background(), token, u)
 
 	assert.NoError(t, err)
 

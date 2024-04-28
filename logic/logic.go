@@ -7,14 +7,15 @@ import (
 )
 
 type Logic struct {
-	tg   peacefulroad.TelegramService
-	us   peacefulroad.UserService
-	ms   *myshare.Client
-	auth *auth.Auth
+	tg             peacefulroad.TelegramService
+	us             peacefulroad.UserService
+	ms             *myshare.Client
+	auth           *auth.Auth
+	allowedClubIds []int
 }
 
-func New(tg peacefulroad.TelegramService, us peacefulroad.UserService, ms *myshare.Client, auth *auth.Auth) *Logic {
-	l := &Logic{tg, us, ms, auth}
+func New(tg peacefulroad.TelegramService, us peacefulroad.UserService, ms *myshare.Client, auth *auth.Auth, clubIds []int) *Logic {
+	l := &Logic{tg, us, ms, auth, clubIds}
 	auth.SetPostLoginAction(l.postLoginHook)
 	auth.SetPostLogoutAction(l.postLogoutHook)
 	return l

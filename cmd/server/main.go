@@ -5,12 +5,15 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/JakubC-projects/peaceful-road/auth"
 	"github.com/JakubC-projects/peaceful-road/firebase"
 	"github.com/JakubC-projects/peaceful-road/logic"
 	"github.com/JakubC-projects/peaceful-road/myshare"
 	"github.com/JakubC-projects/peaceful-road/telegram"
+	"github.com/samber/lo"
 )
 
 var (
@@ -25,7 +28,7 @@ var (
 	oauthClientSecret = os.Getenv("OAUTH_CLIENT_SECRET")
 
 	myshareBaseUrl  = os.Getenv("MYSHARE_BASE_URL")
-	myshareClubId   = os.Getenv("MYSHARE_CLUB_ID")
+	myshareClubIds  = os.Getenv("MYSHARE_CLUB_IDS")
 	myshareAudience = os.Getenv("MYSHARE_AUDIENCE")
 
 	usePolling = os.Getenv("USE_POLLING")
@@ -36,7 +39,7 @@ func main() {
 
 	tg := telegram.New(telegramApiKey)
 
-	myshareClient := myshare.NewClient(myshareBaseUrl, myshareClubId)
+	myshareClient := myshare.NewClient(myshareBaseUrl)
 	firestore := firebase.NewStore(gcpProjectId)
 
 	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{}))
@@ -49,7 +52,7 @@ func main() {
 		Host:         serverHost,
 	}, firestore, tg, logger)
 
-	logic := logic.New(tg, firestore, myshareClient, auth)
+	logic := logic.New(tg, firestore, myshareClient, auth, parseClubIds())
 
 	auth.AddRoutes(mux)
 
@@ -60,4 +63,15 @@ func main() {
 	}
 
 	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
+}
+
+func parseClubIds() []int {
+	clubIdsRaw := strings.Split(myshareClubIds, ",")
+	return lo.Map(clubIdsRaw, func(idRaw string, _ int) int {
+		id, err := strconv.Atoi(idRaw)
+		if err != nil {
+			panic("cannot parse club ids: " + err.Error())
+		}
+		return id
+	})
 }
