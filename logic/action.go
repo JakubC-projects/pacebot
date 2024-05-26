@@ -6,9 +6,9 @@ import (
 	"github.com/samber/lo"
 )
 
-var actionStartTime = lo.Must(time.Parse(time.RFC3339, "2024-03-06T00:00:00Z"))
-var actionEndTime = lo.Must(time.Parse(time.RFC3339, "2024-07-11T00:00:00Z"))
-var actionStartPercentage = 35.0
+var actionStartTime = lo.Must(time.Parse(time.RFC3339, "2024-05-20T00:00:00Z"))
+var actionEndTime = lo.Must(time.Parse(time.RFC3339, "2024-07-01T00:00:00Z"))
+var actionStartPercentage = 55.12
 var actionEndPercentage = 70.0
 
 func getStatusForWeek(now time.Time) float64 {

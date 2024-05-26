@@ -13,9 +13,8 @@ func TestStatusForWeek(t *testing.T) {
 		time    time.Time
 		percent float64
 	}{
-		{time: lo.Must(time.Parse(time.RFC3339, "2024-04-22T10:10:10Z")), percent: 49.9},
-		{time: lo.Must(time.Parse(time.RFC3339, "2024-04-25T10:10:10Z")), percent: 49.9},
-		{time: lo.Must(time.Parse(time.RFC3339, "2024-04-20T10:10:10Z")), percent: 48.0},
+		{time: lo.Must(time.Parse(time.RFC3339, "2024-05-26T10:10:10Z")), percent: 57.6},
+		{time: lo.Must(time.Parse(time.RFC3339, "2024-06-27T10:10:10Z")), percent: 70.0},
 	}
 
 	for _, tc := range testCases {
