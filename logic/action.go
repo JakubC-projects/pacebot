@@ -6,19 +6,25 @@ import (
 	"github.com/samber/lo"
 )
 
-var actionStartTime = lo.Must(time.Parse(time.RFC3339, "2024-05-20T00:00:00Z"))
-var actionEndTime = lo.Must(time.Parse(time.RFC3339, "2024-07-01T00:00:00Z"))
-var actionStartPercentage = 55.12
-var actionEndPercentage = 70.0
+type ActionMilestone struct {
+	Date      time.Time
+	Milestone float64
+}
 
-func getStatusForWeek(now time.Time) float64 {
-	today := now.Truncate(time.Hour * 24)
-	daysToNextMonday := int(7-today.Weekday())%7 + 1
+var milestones = []ActionMilestone{
+	{Date: lo.Must(time.Parse(time.RFC3339, "2024-08-01T00:00:00Z")), Milestone: 70},
+	{Date: lo.Must(time.Parse(time.RFC3339, "2024-09-01T00:00:00Z")), Milestone: 76},
+	{Date: lo.Must(time.Parse(time.RFC3339, "2024-10-01T00:00:00Z")), Milestone: 70},
+	{Date: lo.Must(time.Parse(time.RFC3339, "2024-11-01T00:00:00Z")), Milestone: 82},
+	{Date: lo.Must(time.Parse(time.RFC3339, "2024-12-01T00:00:00Z")), Milestone: 94},
+	{Date: lo.Must(time.Parse(time.RFC3339, "2025-01-01T00:00:00Z")), Milestone: 100},
+}
 
-	nextMonday := today.AddDate(0, 0, daysToNextMonday)
-
-	actionDuration := float64(actionEndTime.Sub(actionStartTime))
-	elapsedDuration := float64(nextMonday.Sub(actionStartTime))
-
-	return elapsedDuration/actionDuration*(actionEndPercentage-actionStartPercentage) + actionStartPercentage
+func getStatusForNextMilestone(now time.Time) float64 {
+	for _, m := range milestones {
+		if m.Date.After(now) {
+			return m.Milestone
+		}
+	}
+	return 100
 }

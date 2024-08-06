@@ -6,7 +6,7 @@ type StatusMessage struct {
 
 	Currency string
 
-	WeekTarget float64
+	MilestoneTarget float64
 
 	RegisterURL string
 	DonateURL   string

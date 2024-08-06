@@ -47,7 +47,7 @@ func (s *Service) EditStatusMessage(chatId int, messageId int, content peacefulr
 func (s *Service) getStatusMessage(content peacefulroad.StatusMessage) (string, tgbotapi.InlineKeyboardMarkup) {
 	userPercent := content.CurrentStatus / content.SeasonTarget * 100
 
-	missingAmount := (content.WeekTarget - userPercent) * content.SeasonTarget / 100
+	missingAmount := (content.MilestoneTarget - userPercent) * content.SeasonTarget / 100
 
 	statusEmoji := "🟢"
 	statusMessage := ""
@@ -58,7 +58,7 @@ func (s *Service) getStatusMessage(content peacefulroad.StatusMessage) (string, 
 	}
 
 	text := fmt.Sprintf(`
-Cel na ten tydzień: <b>%.2f%%</b>
+Cel na ten miesiąc: <b>%.2f%%</b>
 Twój Status: <b>%.2f%%</b> %s (%.2f / %.2f %s)
 %s
 <a href="%s">Zapisz się na Dugnad!</a>
@@ -66,7 +66,7 @@ Twój Status: <b>%.2f%%</b> %s (%.2f / %.2f %s)
 
 Dane z: %s
 `,
-		content.WeekTarget,
+		content.MilestoneTarget,
 		userPercent,
 		statusEmoji,
 		content.CurrentStatus,

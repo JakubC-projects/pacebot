@@ -15,10 +15,10 @@ func (l *Logic) getStatusMessage(ctx context.Context, user peacefulroad.User) (p
 	}
 
 	statusMessage := peacefulroad.StatusMessage{
-		CurrentStatus: status.TransactionsAmount,
-		SeasonTarget:  status.Target,
-		Currency:      status.Currency,
-		WeekTarget:    getStatusForWeek(time.Now()),
+		CurrentStatus:   status.TransactionsAmount,
+		SeasonTarget:    status.Target,
+		Currency:        status.Currency,
+		MilestoneTarget: getStatusForNextMilestone(time.Now()),
 
 		RegisterURL:   "https://app.myshare.today/registration",
 		DonateURL:     "https://donationbuk.no",

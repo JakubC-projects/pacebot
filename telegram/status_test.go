@@ -11,10 +11,10 @@ func TestStatusMessage(t *testing.T) {
 	tg := New(token)
 
 	s := peacefulroad.StatusMessage{
-		CurrentStatus: 1000,
-		SeasonTarget:  2000,
-		WeekTarget:    40,
-		Currency:      "PLN",
+		CurrentStatus:   1000,
+		SeasonTarget:    2000,
+		MilestoneTarget: 40,
+		Currency:        "PLN",
 
 		RegisterURL: "https://app.myshare.today/registration",
 		DonateURL:   "https://donationbuk.no",
