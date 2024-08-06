@@ -40,5 +40,6 @@ func (c *Client) get(ctx context.Context, token *oauth2.Token, path string, resu
 	if err != nil {
 		return fmt.Errorf("cannot unmarshal result: %w", err)
 	}
+
 	return nil
 }
