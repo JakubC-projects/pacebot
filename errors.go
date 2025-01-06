@@ -1,4 +1,4 @@
-package peacefulroad
+package pacebot
 
 import "errors"
 

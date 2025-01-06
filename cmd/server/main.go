@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/JakubC-projects/peaceful-road/auth"
-	"github.com/JakubC-projects/peaceful-road/firebase"
-	"github.com/JakubC-projects/peaceful-road/logic"
-	"github.com/JakubC-projects/peaceful-road/myshare"
-	"github.com/JakubC-projects/peaceful-road/telegram"
+	"github.com/JakubC-projects/pacebot/auth"
+	"github.com/JakubC-projects/pacebot/firebase"
+	"github.com/JakubC-projects/pacebot/logic"
+	"github.com/JakubC-projects/pacebot/myshare"
+	"github.com/JakubC-projects/pacebot/telegram"
 	"github.com/samber/lo"
 )
 

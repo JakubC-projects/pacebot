@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	"golang.org/x/oauth2"
 )
 
@@ -20,7 +20,7 @@ type myshareTarget struct {
 	TotalAmount float64 `json:"totalAmount"`
 }
 
-func (c *Client) GetStatus(ctx context.Context, token *oauth2.Token, u peacefulroad.User) (peacefulroad.Status, error) {
+func (c *Client) GetStatus(ctx context.Context, token *oauth2.Token, u pacebot.User) (pacebot.Status, error) {
 	path := fmt.Sprintf("/TargetStatus/%d/Member/%d", u.ClubId, u.PersonID)
 
 	var res response[myshareStatus]
@@ -28,12 +28,12 @@ func (c *Client) GetStatus(ctx context.Context, token *oauth2.Token, u peacefulr
 	err := c.get(ctx, token, path, &res)
 
 	if len(res.Data.Targets) < 1 {
-		return peacefulroad.Status{}, errors.New("no target specified")
+		return pacebot.Status{}, errors.New("no target specified")
 	}
 
 	currentTarget := res.Data.Targets[0]
 
-	status := peacefulroad.Status{
+	status := pacebot.Status{
 		TransactionsAmount: res.Data.TransactionsAmount,
 		PercentageValue:    res.Data.PercentageValue,
 		Target:             currentTarget.TotalAmount,

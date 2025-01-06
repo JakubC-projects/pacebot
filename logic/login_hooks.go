@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
-	"github.com/JakubC-projects/peaceful-road/myshare"
+	"github.com/JakubC-projects/pacebot"
+	"github.com/JakubC-projects/pacebot/myshare"
 	"github.com/samber/lo"
 )
 
-func (a *Logic) postLoginHook(ctx context.Context, user peacefulroad.User) error {
+func (a *Logic) postLoginHook(ctx context.Context, user pacebot.User) error {
 	orgs, err := a.ms.GetOrgs(ctx, user)
 	if err != nil {
 		return fmt.Errorf("cannot get user orgs: %w", err)
@@ -40,7 +40,7 @@ func (a *Logic) postLoginHook(ctx context.Context, user peacefulroad.User) error
 	return nil
 }
 
-func (a *Logic) postLogoutHook(ctx context.Context, user peacefulroad.User) error {
+func (a *Logic) postLogoutHook(ctx context.Context, user pacebot.User) error {
 	err := a.us.DeleteUser(ctx, user.ChatId)
 	if err != nil {
 		return fmt.Errorf("cannot save user: %w", err)

@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
 )
@@ -17,7 +17,7 @@ var (
 
 func TestGetStatus(t *testing.T) {
 	tokenRaw := ""
-	u := peacefulroad.User{
+	u := pacebot.User{
 		PersonID: 41838,
 		ClubId:   3982,
 	}

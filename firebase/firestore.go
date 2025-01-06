@@ -6,7 +6,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	_ "google.golang.org/api/option"
 )
 
@@ -16,7 +16,7 @@ type Store struct {
 	client *firestore.Client
 }
 
-var _ peacefulroad.UserService = (*Store)(nil)
+var _ pacebot.UserService = (*Store)(nil)
 
 func NewStore(projectId string) *Store {
 	conf := &firebase.Config{ProjectID: projectId}

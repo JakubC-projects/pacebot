@@ -6,18 +6,18 @@ import (
 	"log/slog"
 	"net/url"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	"github.com/coreos/go-oidc"
 	"golang.org/x/oauth2"
 )
 
-type PostLoginAction func(ctx context.Context, user peacefulroad.User) error
+type PostLoginAction func(ctx context.Context, user pacebot.User) error
 
 type Auth struct {
 	config           *oauth2.Config
 	logoutUrl        string
 	host             string
-	tgs              peacefulroad.TelegramService
+	tgs              pacebot.TelegramService
 	log              *slog.Logger
 	postLoginAction  PostLoginAction
 	postLogoutAction PostLoginAction
@@ -29,8 +29,8 @@ type Config struct {
 
 func New(
 	conf Config,
-	us peacefulroad.UserService,
-	tgs peacefulroad.TelegramService,
+	us pacebot.UserService,
+	tgs pacebot.TelegramService,
 	log *slog.Logger,
 ) *Auth {
 

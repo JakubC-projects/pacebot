@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"time"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 )
 
-func (l *Logic) getStatusMessage(ctx context.Context, user peacefulroad.User) (peacefulroad.StatusMessage, error) {
+func (l *Logic) getStatusMessage(ctx context.Context, user pacebot.User) (pacebot.StatusMessage, error) {
 	status, err := l.ms.GetStatus(ctx, user.Token, user)
 	if err != nil {
-		return peacefulroad.StatusMessage{}, fmt.Errorf("cannot get user status: %w", err)
+		return pacebot.StatusMessage{}, fmt.Errorf("cannot get user status: %w", err)
 	}
 
-	statusMessage := peacefulroad.StatusMessage{
+	statusMessage := pacebot.StatusMessage{
 		CurrentStatus:   status.TransactionsAmount,
 		SeasonTarget:    status.Target,
 		Currency:        status.Currency,

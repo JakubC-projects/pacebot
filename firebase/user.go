@@ -4,17 +4,17 @@ import (
 	"context"
 	"fmt"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func (s *Store) GetUser(ctx context.Context, chatId int) (peacefulroad.User, error) {
-	var res peacefulroad.User
+func (s *Store) GetUser(ctx context.Context, chatId int) (pacebot.User, error) {
+	var res pacebot.User
 	doc, err := s.client.Collection(userCollectionName).Doc(fmt.Sprint(chatId)).Get(ctx)
 	if status.Code(err) == codes.NotFound {
-		return peacefulroad.User{}, peacefulroad.ErrNotFound
+		return pacebot.User{}, pacebot.ErrNotFound
 	}
 	if err != nil {
 		return res, fmt.Errorf("cannot fetch user from the database: %w", err)
@@ -23,8 +23,8 @@ func (s *Store) GetUser(ctx context.Context, chatId int) (peacefulroad.User, err
 	return res, err
 }
 
-func (s *Store) GetAllUsers(ctx context.Context) ([]peacefulroad.User, error) {
-	var res []peacefulroad.User
+func (s *Store) GetAllUsers(ctx context.Context) ([]pacebot.User, error) {
+	var res []pacebot.User
 	iter := s.client.Collection(userCollectionName).Documents(ctx)
 	defer iter.Stop()
 	for {
@@ -35,7 +35,7 @@ func (s *Store) GetAllUsers(ctx context.Context) ([]peacefulroad.User, error) {
 		if err != nil {
 			return nil, fmt.Errorf("cannot get document: %w", err)
 		}
-		var user peacefulroad.User
+		var user pacebot.User
 		if err := doc.DataTo(&user); err != nil {
 			return nil, fmt.Errorf("cannot marshal document: %w", err)
 		}
@@ -45,7 +45,7 @@ func (s *Store) GetAllUsers(ctx context.Context) ([]peacefulroad.User, error) {
 	return res, nil
 }
 
-func (s *Store) SaveUser(ctx context.Context, user peacefulroad.User) error {
+func (s *Store) SaveUser(ctx context.Context, user pacebot.User) error {
 	_, err := s.client.Collection(userCollectionName).Doc(fmt.Sprint(user.ChatId)).Set(ctx, user)
 	return err
 }

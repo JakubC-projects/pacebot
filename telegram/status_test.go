@@ -3,14 +3,14 @@ package telegram
 import (
 	"testing"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestStatusMessage(t *testing.T) {
 	tg := New(token)
 
-	s := peacefulroad.StatusMessage{
+	s := pacebot.StatusMessage{
 		CurrentStatus:   1000,
 		SeasonTarget:    2000,
 		MilestoneTarget: 40,
@@ -19,7 +19,7 @@ func TestStatusMessage(t *testing.T) {
 		RegisterURL: "https://app.myshare.today/registration",
 		DonateURL:   "https://donationbuk.no",
 
-		LogoutURL: "http://peacefulroad.test:8080/logout?chatId=108034197",
+		LogoutURL: "http://pacebot.test:8080/logout?chatId=108034197",
 	}
 
 	err := tg.SendStatusMessage(testChatId, s)
