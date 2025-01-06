@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -13,7 +13,7 @@ type Service struct {
 	bot *tgbotapi.BotAPI
 }
 
-var _ peacefulroad.TelegramService = (*Service)(nil)
+var _ pacebot.TelegramService = (*Service)(nil)
 
 func New(token string) *Service {
 	bot, err := tgbotapi.NewBotAPI(token)

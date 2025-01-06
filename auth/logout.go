@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 )
 
 // Handler for our login.
@@ -20,7 +20,7 @@ func (a *Auth) logoutHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = a.postLogoutAction(ctx, peacefulroad.User{ChatId: chatId})
+	err = a.postLogoutAction(ctx, pacebot.User{ChatId: chatId})
 	if err != nil {
 		err := fmt.Errorf("cannot perform post logout action: %w", err)
 		a.log.ErrorContext(ctx, err.Error())

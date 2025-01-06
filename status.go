@@ -1,4 +1,4 @@
-package peacefulroad
+package pacebot
 
 type Status struct {
 	TransactionsAmount float64 `json:"transactionsAmount"`

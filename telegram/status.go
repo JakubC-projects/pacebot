@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"time"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/samber/lo"
 )
 
-func (s *Service) SendStatusMessage(chatId int, content peacefulroad.StatusMessage) error {
+func (s *Service) SendStatusMessage(chatId int, content pacebot.StatusMessage) error {
 	text, buttons := s.getStatusMessage(content)
 
 	msg := tgbotapi.MessageConfig{
@@ -26,7 +26,7 @@ func (s *Service) SendStatusMessage(chatId int, content peacefulroad.StatusMessa
 	return err
 }
 
-func (s *Service) EditStatusMessage(chatId int, messageId int, content peacefulroad.StatusMessage) error {
+func (s *Service) EditStatusMessage(chatId int, messageId int, content pacebot.StatusMessage) error {
 	text, buttons := s.getStatusMessage(content)
 
 	msg := tgbotapi.EditMessageTextConfig{
@@ -44,7 +44,7 @@ func (s *Service) EditStatusMessage(chatId int, messageId int, content peacefulr
 	return err
 }
 
-func (s *Service) getStatusMessage(content peacefulroad.StatusMessage) (string, tgbotapi.InlineKeyboardMarkup) {
+func (s *Service) getStatusMessage(content pacebot.StatusMessage) (string, tgbotapi.InlineKeyboardMarkup) {
 	userPercent := content.CurrentStatus / content.SeasonTarget * 100
 
 	missingAmount := (content.MilestoneTarget - userPercent) * content.SeasonTarget / 100

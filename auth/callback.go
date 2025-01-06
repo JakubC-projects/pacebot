@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	"github.com/lestrrat-go/jwx/jwt"
 	"golang.org/x/oauth2"
 )
@@ -30,7 +30,7 @@ func (a *Auth) callbackHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	user := peacefulroad.User{ChatId: ls.ChatId}
+	user := pacebot.User{ChatId: ls.ChatId}
 	err = fillUserDataFromToken(&user, token)
 
 	if err != nil {
@@ -67,7 +67,7 @@ func (a *Auth) getCallbackToken(req *http.Request, ls loginState) (*oauth2.Token
 	return token, nil
 }
 
-func fillUserDataFromToken(user *peacefulroad.User, token *oauth2.Token) error {
+func fillUserDataFromToken(user *pacebot.User, token *oauth2.Token) error {
 	idToken := token.Extra("id_token").(string)
 	idTokenClaims, err := jwt.Parse([]byte(idToken))
 	if err != nil {

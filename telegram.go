@@ -1,4 +1,4 @@
-package peacefulroad
+package pacebot
 
 type StatusMessage struct {
 	CurrentStatus float64

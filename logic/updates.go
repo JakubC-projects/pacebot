@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"golang.org/x/sync/errgroup"
 )
@@ -14,7 +14,7 @@ func (l *Logic) HandleUpdate(ctx context.Context, upd tgbotapi.Update) error {
 	var chatId = getChatId(upd)
 
 	user, err := l.us.GetUser(ctx, chatId)
-	if errors.Is(err, peacefulroad.ErrNotFound) {
+	if errors.Is(err, pacebot.ErrNotFound) {
 		err := l.tg.SendWelcomeMessage(chatId, l.auth.LoginEndpoint(chatId))
 		if err != nil {
 			fmt.Println(err)
@@ -68,7 +68,7 @@ func (l *Logic) HandleUpdate(ctx context.Context, upd tgbotapi.Update) error {
 	return nil
 }
 
-func (l *Logic) handleUpdateStatus(ctx context.Context, user peacefulroad.User, messageId int) error {
+func (l *Logic) handleUpdateStatus(ctx context.Context, user pacebot.User, messageId int) error {
 	statusMessage, err := l.getStatusMessage(ctx, user)
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func (l *Logic) handleUpdateStatus(ctx context.Context, user peacefulroad.User, 
 	return nil
 }
 
-func (l *Logic) handleNotifyAll(ctx context.Context, user peacefulroad.User) error {
+func (l *Logic) handleNotifyAll(ctx context.Context, user pacebot.User) error {
 	if !user.IsAdmin {
 		return nil
 	}
@@ -122,7 +122,7 @@ func (l *Logic) handleNotifyAll(ctx context.Context, user peacefulroad.User) err
 	return eg.Wait()
 }
 
-func (l *Logic) ensureValidToken(ctx context.Context, user *peacefulroad.User) error {
+func (l *Logic) ensureValidToken(ctx context.Context, user *pacebot.User) error {
 	tok, err := l.auth.GetFreshToken(ctx, user.Token)
 	if err != nil {
 		return fmt.Errorf("cannot get fresh token: %w", err)

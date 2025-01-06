@@ -3,14 +3,14 @@ package myshare
 import (
 	"context"
 
-	peacefulroad "github.com/JakubC-projects/peaceful-road"
+	"github.com/JakubC-projects/pacebot"
 )
 
 type Org struct {
 	Id int `json:"id"`
 }
 
-func (c *Client) GetOrgs(ctx context.Context, u peacefulroad.User) ([]Org, error) {
+func (c *Client) GetOrgs(ctx context.Context, u pacebot.User) ([]Org, error) {
 	var res response[[]Org]
 
 	err := c.get(ctx, u.Token, "/Profile/Organisations", &res)
